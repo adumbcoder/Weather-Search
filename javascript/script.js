@@ -6,7 +6,7 @@
 function populateWeather(){
 let search = document.querySelector('#search-value').value;
 let apiKey = '781f26b7b30722bc9d7b5d602eebcb7f';
-let queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + search + '&appid=' + apiKey;
+let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '&appid=' + apiKey;
 
 
 $.ajax(
