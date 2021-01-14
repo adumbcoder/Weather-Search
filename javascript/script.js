@@ -34,8 +34,8 @@ $.ajax(
             // let uvIndex = document.createElement('li');
             // uvIndex.textContent = response
             
-        )
-    }
+           // }
+    })
 
 
 document.addEventListener('click', function(e){
