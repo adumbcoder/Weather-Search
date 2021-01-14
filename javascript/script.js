@@ -26,7 +26,7 @@ $.ajax(
 
 
 document.addEventListener('click', function(e){
-    if(e.target.matches('.search-button'))
+    if(e.target.matches('#search-button'))
     {
     populateWeather();
     };
