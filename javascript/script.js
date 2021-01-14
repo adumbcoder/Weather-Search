@@ -6,7 +6,7 @@
 function populateWeather(){
 let search = document.querySelector('#search-value');
 let apiKey = '{781f26b7b30722bc9d7b5d602eebcb7f}';
-let queryURL = 'api.openweathermap.org/data/2.5/weather?q=' + search.textContent + '&appid=' + apiKey;
+let queryURL = 'https://www.openweathermap.org/data/2.5/weather?q=' + search.textContent + '&appid=' + apiKey;
 
 
 $.ajax({
@@ -22,7 +22,8 @@ $.ajax({
 }
 
 
-document.addEventListener('click', function(){
+document.addEventListener('click', function(e){
+    e.target.match('.search-button')
     populateWeather();
 });
 //city name, date, an icon for the weather, temperature, humidty, wind speed, UV index
