@@ -4,7 +4,7 @@
 
 //api.openweathermap.org/data/2.5/weather?q={city name},{state code},{country code}&appid={API key}
 function populateWeather(){
-let search = document.querySelector('#search-value').textContent;
+let search = document.querySelector('#search-value').value;
 let apiKey = '{781f26b7b30722bc9d7b5d602eebcb7f}';
 let queryURL = 'api.openweathermap.org/data/2.5/weather?q=' + search + '&appid=' + apiKey;
 
