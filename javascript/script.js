@@ -6,23 +6,23 @@
 function populateWeather(){
 let search = document.querySelector('#search-value').value;
 let apiKey = '781f26b7b30722bc9d7b5d602eebcb7f';
-let queryURL = 'api.openweathermap.org/data/2.5/weather?q=' + search + '&appid=' + apiKey;
+let queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + search + '&appid=' + apiKey;
 
 
 $.ajax(
     {
     url:queryURL,
     method:"GET"
-    
-}
-).then(function(response)
-{
-    console.log(response);
-    // let newCityHome = document.createElement('div');
-    // let newCityName = document.createElement('h2')
-    // newCityName.textContent = 
-})
-}
+    }
+        ).then(function(response)
+            {
+            console.log(response);
+            // let newCityHome = document.createElement('div');
+            // let newCityName = document.createElement('h2')
+            // newCityName.textContent = 
+            }
+        )
+    }
 
 
 document.addEventListener('click', function(e){
