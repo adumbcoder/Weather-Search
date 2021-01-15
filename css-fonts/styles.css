@@ -1,0 +1,41 @@
+.centerThis {
+    text-align: center;
+    justify-content: center;
+}
+
+#today,
+#forecast {
+    width: 250px;
+    height: auto;
+    border: 2px solid grey;
+    padding: 10px;
+    background-color: lightblue;
+}
+.styles {
+    width: auto;
+    height: auto;
+    border: 2px solid grey;
+    padding: 10px;
+    background-color: lightblue;
+}
+
+
+.floatRight {
+    float: right;
+}
+
+.history {
+    margin-left: 15px;
+}
+
+.favorable {
+    background-color: green;
+}
+
+.moderate {
+    background-color: yellow;
+}
+
+.severe {
+    background-color: red;
+}
