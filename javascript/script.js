@@ -1,12 +1,24 @@
 
 //link to the OpenWeatherAPI
 //search for a city and save the results to a list(with anchors)
-
+//city name, date, an icon for the weather, temperature, humidty, wind speed, UV index
+//make sure UV index has 3 diffrent colors (favorable=green, moderate=yellow, severe=red)
+//5 day forecast(has date, icon for weather, temp, humidty)
+//when you click on the search history, recalls that search
+//when dashboard is reopened, last search is kept and opened
+window.onload = function() {
+    document.querySelector('#search-value').value = localStorage.getItem('key');
+    populateWeather();
+    populateFiveDay();
+    populateHistory();
+    
+  }; 
 //api.openweathermap.org/data/2.5/weather?q={city name},{state code},{country code}&appid={API key}
 
 let apiKey = '781f26b7b30722bc9d7b5d602eebcb7f';
 
 function populateWeather(){
+
 let search = document.querySelector('#search-value').value;
 let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '&units=imperial&appid=' + apiKey;
 
@@ -21,38 +33,60 @@ let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '
                 console.log(response);
                 
                 //General data for current data
-                let newCityHome = document.createElement('div');
+                let card = document.createElement('div');
+                card.className = ('card');
                 
+                let cardBody = document.createElement('div');
+                cardBody.className = ('card-body bg-info');
+                
+                let cardName = document.createElement('div');
+                cardName.className = ('card-title');
+
                 let icon = document.createElement('img')
                 icon.className = 'floatRight';
                 icon.src = 'https://openweathermap.org/img/wn/' + response.weather[0].icon + '.png';
-                let name = document.createElement('h2')
+
+                let name = document.createElement('div')
                 name.textContent = response.name;
-                let infoList = document.createElement('ul')
-                let temp = document.createElement('li');
-                temp.textContent ='Temperature: ' + response.main.temp.toFixed(0) + '°F';
+                
                 let todaysDate = document.createElement('p');
+                todaysDate.className = ('card-text');
                 date = new Date();
                 let curYear = date.getFullYear();
                 let curMonth = date.getMonth() + 1;
                 let curDay = date.getDate();
                 let todayDate = (curMonth < 10 ? '0' : '') + curMonth + '/' + (curDay < 10 ? '0' : '') + curDay + '/' + curYear;
                 todaysDate.textContent = todayDate;
+                
+                let info = document.createElement('ul');
+                info.className = ('details list-group list-group-flush')
+
                 let humidity = document.createElement('li')
+                humidity.className = 'list-group-item bg-info';
                 humidity.textContent ='Humidty: ' + response.main.humidity + '%';
+
                 let windspd = document.createElement('li');
+                windspd.className = 'list-group-item';
                 windspd.textContent ='Wind Speed: ' + response.wind.speed + 'mph';
 
+                let temp = document.createElement('li');
+                temp.className = 'list-group-item';
+                temp.textContent ='Temperature: ' + response.main.temp.toFixed(0) + '°F';
+
+                let nameCont = document.querySelector('.name');
                 //append created elements for current Weather
-                document.querySelector('#today').append(newCityHome);
-                document.querySelector('#today').append(icon);
-                document.querySelector('#today').append(name);
-                document.querySelector('#today').append(todaysDate);
-                document.querySelector('#today').append(infoList);
+                
+                document.querySelector('.forecast').append(card);
+                card.append(cardBody);
+                cardBody.append(cardName);
+                cardName.append(icon);
+                cardName.append(name);
+                cardBody.append(todaysDate);
+                card.append(info);
                 //list items to the list 
-                infoList.appendChild(temp)
-                infoList.appendChild(humidity)
-                infoList.appendChild(windspd)
+                document.querySelector('.details').appendChild(temp)
+                document.querySelector('.details').appendChild(humidity)
+                document.querySelector('.details').appendChild(windspd)
 
                 //get latitude and longitude for uv index
                 let lat = response.coord.lat;
@@ -67,19 +101,20 @@ let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '
                         {
                             console.log(response)
                             let uvIndex = document.createElement('li');
+                            uvIndex.classList.add('list-group-item');
                             uvIndex.textContent ='UV Index: ' + response[0].value;
-                            infoList.append(uvIndex);
+                            document.querySelector('.details').appendChild(uvIndex);
                             if(uvIndex => 0 && uvIndex <= 2.99 )
                             {
-                                uvIndex.classList.add('favorable');
+                                uvIndex.classList.add('bg-success');
                             }
                             else if(uvIndex => 3 && uvIndex <= 4.99)
                             {
-                                uvIndex.classList.add('moderate');
+                                uvIndex.classList.add('bg-warning');
                             }
                             else
                             {
-                                uvIndex.classList.add('severe')
+                                uvIndex.classList.add('bg-danger')
                             }
                         })
                 })
@@ -101,95 +136,107 @@ function populateFiveDay() {
                 console.log(response);
                 for(let i = 1; i < 6; i++)
                 {
-                    let newCityHome = document.createElement('div');
-                    
-                    let icon = document.createElement('img')
-                    icon.className = 'floatRight';
-                    icon.src = 'https://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png';
-                    
-                    let infoList = document.createElement('ul')
-                    let temp = document.createElement('li');
-                    temp.textContent ='Temperature: ' + response.list[i].main.temp.toFixed(0) + '°F'; 
-                    let humidity = document.createElement('li')
-                    humidity.textContent ='Humidty: ' + response.list[i].main.humidity + '%'; 
-                    let todaysDate = document.createElement('p');
+                    let card = document.createElement('div');
+                    card.className = ('card lineUp')
+
+                    let cardBody = document.createElement('div');
+                    cardBody.className = ('card-body bg-info')
+
+                    let cardDate = document.createElement('p');
+                    cardDate.className = ('fiveDayDate card-text')
                     date = new Date();
                     let curYear = date.getFullYear();
                     let curMonth = date.getMonth() + 1;
                     let curDay = date.getDate() + parseInt([i]);
                     let todayDate = (curMonth < 10 ? '0' : '') + curMonth + '/' + (curDay < 10 ? '0' : '') + curDay + '/' + curYear;
-                    todaysDate.textContent = todayDate;
+                    cardDate.textContent = todayDate;
 
-                    document.querySelector('#forecast').append(newCityHome);
-                    newCityHome.appendChild(icon);
-                    newCityHome.appendChild(todaysDate);
-                    newCityHome.appendChild(infoList);
+                    let icon = document.createElement('img')
+                    icon.className = 'center';
+                    icon.src = 'https://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png';
+                    
+                    let infoList = document.createElement('ul')
+                    infoList.className = 'fiveDayDetails list-group list-group-flush'
 
-                    infoList.appendChild(temp)
-                    infoList.appendChild(humidity)
+                    let temp = document.createElement('li');
+                    temp.className = ('list-group-item')
+                    temp.textContent ='Temperature: ' + response.list[i].main.temp.toFixed(0) + '°F'; 
+
+                    let humidity = document.createElement('li')
+                    humidity.className = ('list-group-item bg-info')
+                    humidity.textContent ='Humidty: ' + response.list[i].main.humidity + '%';
+
+                    
+
+                    document.querySelector('.fiveDay').append(card);
+                    card.appendChild(cardBody);
+                    cardBody.append(icon);
+                    cardBody.appendChild(cardDate);
+                    card.appendChild(infoList);
+                    infoList.appendChild(temp);
+                    infoList.appendChild(humidity);
+
                 }
                 }
             )    
 
 }
 
-function populateHistory() {
-    let search = document.querySelector('#search-value').value;
-    if(document.querySelectorAll('history').textContent === search ){
+ function populateHistory() {
+    localStorage.clear()
+    let searchQuery = document.querySelector('#search-value').value;
 
-    }else{
-        
-        //search history
-        //history list elements
-        let anchorEl = document.createElement('li')
-        anchorEl.textContent = search;
-        anchorEl.classList.add = 'history';
-        
-        //append created elements
-        document.querySelector('.searchHistory').appendChild(anchorEl);
+    let newHistList = document.querySelector('.history');
+
+    let newHistItem = document.createElement('li');
+    newHistItem.className = ('list-group-item histItem')
+    newHistItem.textContent = searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1);
+
+    newHistList.appendChild(newHistItem);
+
+    localStorage.setItem('key', searchQuery)
     }
-}
+ 
 
 
-document.addEventListener('click', function(e){
-    if(e.target.matches('history'))
-    {
-        if(document.querySelectorAll('history').textContent = search ){
-
-        }else{
-        let search = document.querySelector('#search-value').value;
-        let newText = e.target;
-        //empty the div first
-        document.querySelector('#today').textContent = '';
-        //set search value to links text
-        search = newText.textContent;
-        //populate current weather
-        populateWeather();
-        }
-    }
-})
 
 document.addEventListener('click', function(e){
     if(e.target.matches('#search-button'))
     {
-    
+    if(document.querySelector('#search-value').value === '' && document.querySelector('#search-value')!== null)
+    {
+        alert('You must enter a valid location.');
+    }else
+    {
     //empty the div first
-    document.querySelector('#today').textContent = '';
-    //populate current weather
+    document.querySelector('.forecast').textContent = '';
+    document.querySelector('.fiveDay').textContent = '';
+    //populate current weather, fiveday and history lists
     populateWeather();
     populateFiveDay();
     populateHistory();
-    
+    }
     };
 });
 
-//city name, date, an icon for the weather, temperature, humidty, wind speed, UV index
 
-//make sure UV index has 3 diffrent colors (favorable=green, moderate=yellow, severe=red)
+document.addEventListener('click', function(evt) 
+        {
+            if(evt.target.matches('.histItem')){
+                //clear the divs with info in them
+                document.querySelector('.forecast').textContent = '';
+                document.querySelector('.fiveDay').textContent = '';
+                //capture target clicked and search input
+                const itemClicked = evt.target.textContent;
+                const searchQuery = document.querySelector('#search-value');
+                //set the text of the search to the list items
+                searchQuery.value = itemClicked;
 
-//5 day forecast(has date, icon for weather, temp, humidty)
+                //call the functions for the info
+                populateWeather();
+                populateFiveDay();
+                
+            }
+        });
 
-//when you click on the search history, recalls that search
-
-//when dashboard is reopened, last search is kept and opened
-
+        

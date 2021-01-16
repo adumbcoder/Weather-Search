@@ -1,7 +1,12 @@
 # Weather-Search
-This is my Weather Search Site
-You enter a city into the search bar and the current and 5 day forecast is displayed.
+This is my Weather Search Site.
+When you enter a city name, you are returned todays forecast plus the following 5 day forecast.
+The search history is also populated with your search.
+When you click the history item, that city is searched again.
+On page load your last search is reopened.
 
-url:https://github.com/adumbcoder/Weather-Search
-livepage:https://adumbcoder.github.io/Weather-Search/
+Url:
+GitHubRepo:
 
+ 
+ 

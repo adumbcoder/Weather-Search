@@ -18,23 +18,26 @@
   </header>
 
   <div class="container-fluid">
-    <div class="row">
+    <div class="giveMeSomeRoom row">
       <aside class="col-lg-3 bg-light">
         <h5 class="mt-1">Search for a City:</h5>
         <div class="form-inline form-group">
           <input class="form-control" type="text" id="search-value" />
           <button class="btn btn-primary" id="search-button"> <i class="fa fa-search"></i> </button>
         </div>
-
-        <ul class="searchHistory list-group history"></ul>
+        <ul class="history list-group list-group-flush scroll">
+        </ul>
       </aside>
-
-      <div class="col-lg-9">
-        <div id="today" class="mt-3"></div>
-        <div id="forecast" class="mt-3"></div>
-      </div>
+      
+        <div class='forecast center' style="width: 25em;"></div>
+    </div>
+    <div class="giveMeSomeRoom center row">
+      <div class="fiveDay card-group"></div>
     </div>
   </div>
+    
+
+  
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="./javascript/script.js"></script>

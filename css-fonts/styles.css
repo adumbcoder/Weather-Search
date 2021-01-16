@@ -1,7 +1,3 @@
-.centerThis {
-    text-align: center;
-    justify-content: center;
-}
 
 #today,
 #forecast {
@@ -28,7 +24,7 @@
     margin-left: 15px;
 }
 
-.favorable {
+/* .favorable {
     background-color: green;
 }
 
@@ -38,4 +34,29 @@
 
 .severe {
     background-color: red;
+} */
+
+.center{
+    justify-content: center;
 }
+
+.giveMeSomeRoom {
+    margin-top: 15px;
+}
+
+
+.lineUp {
+    margin-left: 10vh;
+    margin-right: 10vh;
+}
+
+.scroll{
+    list-style:none;
+    max-height:200px;
+    height: 200px;
+    margin:0;
+    overflow:auto;
+    padding:0;
+    text-indent:10px;
+    
+  }
