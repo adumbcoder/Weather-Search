@@ -8,5 +8,5 @@ On page load your last search is reopened.
 Url:
 GitHubRepo:
 
- 
+ ![alt text](https://github.com/adumbcoder/Weather-Search/blob/main/images/deployedSite.jpg)
  
