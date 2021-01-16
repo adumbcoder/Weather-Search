@@ -7,10 +7,14 @@
 //when you click on the search history, recalls that search
 //when dashboard is reopened, last search is kept and opened
 window.onload = function() {
-    document.querySelector('#search-value').value = localStorage.getItem('key');
+    if (localStorage.getItem("key") !== null)
+    {
+        document.querySelector('#search-value').value = localStorage.getItem('key');
     populateWeather();
-    populateFiveDay();
-    populateHistory();
+    // populateFiveDay();
+    // populateHistory();
+    }
+   
     
   }; 
 //api.openweathermap.org/data/2.5/weather?q={city name},{state code},{country code}&appid={API key}
@@ -21,16 +25,21 @@ function populateWeather(){
 
 let search = document.querySelector('#search-value').value;
 let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '&units=imperial&appid=' + apiKey;
+const errFunc = function(request, status, error){
+    alert('This city was not found!')
+    console.log(request);
+}
 
-
-    $.ajax(
+    const call = $.ajax(
         {
         url:queryURL,
-        method:"GET"
+        method:"GET",
+        error: errFunc
         }
-            ).then(function(response)
+    
+            ).then(function(data, status, response )
                 {
-                console.log(response);
+                console.log( response);
                 
                 //General data for current data
                 let card = document.createElement('div');
@@ -44,10 +53,10 @@ let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '
 
                 let icon = document.createElement('img')
                 icon.className = 'floatRight';
-                icon.src = 'https://openweathermap.org/img/wn/' + response.weather[0].icon + '.png';
+                icon.src = 'https://openweathermap.org/img/wn/' + data.weather[0].icon + '.png';
 
                 let name = document.createElement('div')
-                name.textContent = response.name;
+                name.textContent = data.name;
                 
                 let todaysDate = document.createElement('p');
                 todaysDate.className = ('card-text');
@@ -63,15 +72,15 @@ let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '
 
                 let humidity = document.createElement('li')
                 humidity.className = 'list-group-item bg-info';
-                humidity.textContent ='Humidty: ' + response.main.humidity + '%';
+                humidity.textContent ='Humidty: ' + data.main.humidity + '%';
 
                 let windspd = document.createElement('li');
                 windspd.className = 'list-group-item';
-                windspd.textContent ='Wind Speed: ' + response.wind.speed + 'mph';
+                windspd.textContent ='Wind Speed: ' + data.wind.speed + 'mph';
 
                 let temp = document.createElement('li');
                 temp.className = 'list-group-item';
-                temp.textContent ='Temperature: ' + response.main.temp.toFixed(0) + '°F';
+                temp.textContent ='Temperature: ' + data.main.temp.toFixed(0) + '°F';
 
                 let nameCont = document.querySelector('.name');
                 //append created elements for current Weather
@@ -89,8 +98,8 @@ let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '
                 document.querySelector('.details').appendChild(windspd)
 
                 //get latitude and longitude for uv index
-                let lat = response.coord.lat;
-                let lon = response.coord.lat;
+                let lat = data.coord.lat;
+                let lon = data.coord.lat;
                 let UVQueryURL = "https://api.openweathermap.org/data/2.5/uvi/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey;
                 $.ajax(
                     {
@@ -99,7 +108,7 @@ let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '
                     }
                         ).then(function(response)
                         {
-                            console.log(response)
+                            // console.log(response)
                             let uvIndex = document.createElement('li');
                             uvIndex.classList.add('list-group-item');
                             uvIndex.textContent ='UV Index: ' + response[0].value;
@@ -118,8 +127,10 @@ let queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + search + '
                             }
                         })
                 })
-        
-    
+        .done(function(){
+            populateFiveDay();
+        })
+    // console.log(status)
 }
 
 function populateFiveDay() {
@@ -133,7 +144,7 @@ function populateFiveDay() {
         }
             ).then(function(response)
                 {
-                console.log(response);
+                // console.log(response);
                 for(let i = 1; i < 6; i++)
                 {
                     let card = document.createElement('div');
@@ -179,7 +190,7 @@ function populateFiveDay() {
                 }
                 }
             )    
-
+            
 }
 
  function populateHistory() {
@@ -201,20 +212,24 @@ function populateFiveDay() {
 
 
 document.addEventListener('click', function(e){
-    if(e.target.matches('#search-button'))
+    e.preventDefault();
+    
+    if(e.target.closest('#search-button'))
     {
+        console.log(e.target)
     if(document.querySelector('#search-value').value === '' && document.querySelector('#search-value')!== null)
     {
         alert('You must enter a valid location.');
-    }else
+    }
+    else
     {
     //empty the div first
     document.querySelector('.forecast').textContent = '';
     document.querySelector('.fiveDay').textContent = '';
     //populate current weather, fiveday and history lists
     populateWeather();
-    populateFiveDay();
     populateHistory();
+    
     }
     };
 });
@@ -234,7 +249,7 @@ document.addEventListener('click', function(evt)
 
                 //call the functions for the info
                 populateWeather();
-                populateFiveDay();
+                
                 
             }
         });
